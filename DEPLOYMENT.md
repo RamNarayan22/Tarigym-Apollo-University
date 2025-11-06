@@ -1,6 +1,8 @@
 # 🚀 TARIGYM Deployment Guide - Render.com
 
-## Deploy on Render (FREE) - Manual Steps
+## Deploy on Render (FREE) - Single Service
+
+### Everything in ONE Place!
 
 ### Step 1: Setup MongoDB Atlas (Free Database)
 
@@ -15,51 +17,36 @@
 6. Replace `<password>` with your actual password
 7. Save this - you'll need it!
 
-### Step 2: Deploy Backend on Render
+### Step 2: Deploy on Render (ONE Service)
 
 1. Go to https://render.com and sign in with GitHub
 2. Click **New +** → **Web Service**
 3. Connect your repository: `RamNarayan22/Tarigym-Apollo-University`
 4. Configure:
-   - **Name**: `tarigym-backend`
-   - **Root Directory**: `server`
+   - **Name**: `tarigym`
+   - **Root Directory**: (leave blank - use root)
    - **Runtime**: `Node`
-   - **Build Command**: `npm install`
+   - **Build Command**: `npm run build`
    - **Start Command**: `npm start`
 5. Click **Advanced** and add Environment Variables:
    - `MONGO_URI` = (your MongoDB Atlas connection string)
    - `JWT_SECRET` = `tarigym-secret-key-2024`
    - `NODE_ENV` = `production`
 6. Click **Create Web Service**
-7. Wait 5-10 minutes. Copy your backend URL (e.g., `https://tarigym-backend.onrender.com`)
+7. Wait 10 minutes for deployment
+8. Your app will be live at ONE URL! (e.g., `https://tarigym.onrender.com`)
 
-### Step 3: Deploy Frontend on Render
+### Step 3: Access Your App
 
-1. Click **New +** → **Static Site**
-2. Select same repository: `RamNarayan22/Tarigym-Apollo-University`
-3. Configure:
-   - **Name**: `tarigym-frontend`
-   - **Root Directory**: `client`
-   - **Build Command**: `npm install && npm run build`
-   - **Publish Directory**: `build`
-4. Add Environment Variable:
-   - `REACT_APP_API_URL` = (your backend URL from step 2)
-5. Click **Create Static Site**
-6. Wait 5-10 minutes for deployment
+Your app is now live at ONE URL:
+- Frontend: `https://tarigym.onrender.com`
+- Backend API: `https://tarigym.onrender.com/api`
 
-### Step 3: Create Admin Account
+### Step 4: Login
 
-Once deployed, run this command to create admin:
-
-```bash
-curl -X POST https://tarigym-backend.onrender.com/api/auth/register-admin \
-  -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
-```
-
-### Your Live URLs:
-- **Frontend**: https://tarigym-frontend.onrender.com
-- **Backend API**: https://tarigym-backend.onrender.com
+Login with default credentials:
+- Username: `admin`
+- Password: `admin123`
 
 ---
 
