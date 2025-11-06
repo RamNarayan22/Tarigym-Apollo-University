@@ -28,25 +28,25 @@ app.get('/health', (req, res) => {
 
 // Serve React frontend in production
 if (process.env.NODE_ENV === 'production') {
-  const buildPath = path.join(__dirname, '../client/build');
+  const buildPath = path.join(__dirname, 'public');
   const fs = require('fs');
   
-  console.log('Build path:', buildPath);
-  console.log('Build folder exists:', fs.existsSync(buildPath));
+  console.log('Serving static files from:', buildPath);
+  console.log('Public folder exists:', fs.existsSync(buildPath));
   
   if (fs.existsSync(buildPath)) {
     app.use(express.static(buildPath));
     
     app.get('/*', (req, res) => {
-      if (!req.path.startsWith('/api')) {
+      if (!req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
         res.sendFile(path.join(buildPath, 'index.html'));
       }
     });
   } else {
-    console.error('Build folder not found!');
+    console.error('Public folder not found!');
     app.get('/*', (req, res) => {
       if (!req.path.startsWith('/api')) {
-        res.send('<h1>Frontend build not found. Please check deployment logs.</h1>');
+        res.send('<h1>Frontend build not found. Run "npm run build" to generate frontend files.</h1>');
       }
     });
   }

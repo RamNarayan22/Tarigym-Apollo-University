@@ -4,7 +4,7 @@
   "description": "TARIGYM Poster Competition Management System",
   "scripts": {
     "start": "node server/server.js",
-    "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client && echo 'Build folder contents:' && ls -la client/build || echo 'Build folder not found'",
+    "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client && cp -r client/build server/public && echo 'Build completed and copied to server/public'",
     "postinstall": "npm install --prefix server"
   },
   "engines": {
