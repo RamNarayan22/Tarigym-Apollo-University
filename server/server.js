@@ -21,15 +21,35 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/judge', require('./routes/judgeRoutes'));
 
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', env: process.env.NODE_ENV });
+});
+
 // Serve React frontend in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
+  const buildPath = path.join(__dirname, '../client/build');
+  const fs = require('fs');
   
-  app.get('/*', (req, res) => {
-    if (!req.path.startsWith('/api')) {
-      res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-    }
-  });
+  console.log('Build path:', buildPath);
+  console.log('Build folder exists:', fs.existsSync(buildPath));
+  
+  if (fs.existsSync(buildPath)) {
+    app.use(express.static(buildPath));
+    
+    app.get('/*', (req, res) => {
+      if (!req.path.startsWith('/api')) {
+        res.sendFile(path.join(buildPath, 'index.html'));
+      }
+    });
+  } else {
+    console.error('Build folder not found!');
+    app.get('/*', (req, res) => {
+      if (!req.path.startsWith('/api')) {
+        res.send('<h1>Frontend build not found. Please check deployment logs.</h1>');
+      }
+    });
+  }
 }
 
 const createDefaultAdmin = async () => {
