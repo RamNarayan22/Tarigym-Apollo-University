@@ -4,7 +4,7 @@
   "description": "TARIGYM Poster Competition Management System",
   "scripts": {
     "start": "node server/server.js",
-    "build": "cd client && npm install && npm run build && cd ../server && npm install",
+    "build": "cd server && npm install && cd ../client && npm install && npm run build",
     "install-all": "cd server && npm install && cd ../client && npm install"
   },
   "engines": {
