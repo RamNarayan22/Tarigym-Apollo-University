@@ -3,27 +3,24 @@ services:
   - type: web
     name: tarigym-backend
     runtime: node
-    buildCommand: cd server && npm install
-    startCommand: cd server && npm start
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
         generateValue: true
-      - key: PORT
-        value: 5001
+      - key: NODE_ENV
+        value: production
     
   # Frontend
   - type: web
     name: tarigym-frontend
     runtime: static
-    buildCommand: cd client && npm install && npm run build
-    staticPublishPath: client/build
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
     envVars:
       - key: REACT_APP_API_URL
         sync: false
-
-databases:
-  - name: tarigym-mongodb
-    databaseName: tarigym
-    user: tarigym
