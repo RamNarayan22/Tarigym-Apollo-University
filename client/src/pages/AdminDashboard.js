@@ -158,7 +158,7 @@ const AdminDashboard = () => {
           <div className="posters-grid">
             {posters.map(poster => (
               <div key={poster._id} className="poster-card">
-                <img src={`http://localhost:5001${poster.imageUrl}`} alt={poster.title} />
+                <img src={`${process.env.REACT_APP_API_URL || ''}${poster.imageUrl}`} alt={poster.title} />
                 <h3>{poster.title}</h3>
                 <p>{poster.description}</p>
                 <p><strong>Assigned Judges:</strong> {poster.assignedJudges.map(j => j.username).join(', ') || 'None'}</p>

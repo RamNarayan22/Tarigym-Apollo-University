@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const API_BASE = process.env.REACT_APP_API_URL || '';
+
 export const adminAPI = {
   createJudge: (data) => axios.post('/api/admin/judges', data),
   getJudges: () => axios.get('/api/admin/judges'),

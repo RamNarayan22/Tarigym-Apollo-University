@@ -54,7 +54,7 @@ const JudgeDashboard = () => {
             ) : (
               posters.map(poster => (
                 <div key={poster._id} className="poster-card">
-                  <img src={`http://localhost:5001${poster.imageUrl}`} alt={poster.title} />
+                  <img src={`${process.env.REACT_APP_API_URL || ''}${poster.imageUrl}`} alt={poster.title} />
                   <h3>{poster.title}</h3>
                   <p>{poster.description}</p>
                   {poster.scored ? (
@@ -81,7 +81,7 @@ const JudgeDashboard = () => {
           <button onClick={() => setSelectedPoster(null)} className="btn-back">← Back to Posters</button>
           
           <div className="poster-detail">
-            <img src={`http://localhost:5001${selectedPoster.imageUrl}`} alt={selectedPoster.title} />
+            <img src={`${process.env.REACT_APP_API_URL || ''}${selectedPoster.imageUrl}`} alt={selectedPoster.title} />
             <h2>{selectedPoster.title}</h2>
             <p>{selectedPoster.description}</p>
           </div>
