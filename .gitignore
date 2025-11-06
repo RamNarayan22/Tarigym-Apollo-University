@@ -1,0 +1,11 @@
+node_modules/
+.env
+uploads/
+dist/
+build/
+.DS_Store
+client/build/
+server/uploads/*.jpg
+server/uploads/*.png
+server/uploads/*.gif
+server/uploads/*.jpeg
