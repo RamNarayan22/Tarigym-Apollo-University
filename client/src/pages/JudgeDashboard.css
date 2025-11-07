@@ -179,3 +179,14 @@
   min-height: 100px;
   resize: vertical;
 }
+
+.total-score {
+  background: #f0f8ff;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 20px 0;
+  font-size: 18px;
+  color: #333;
+  border: 2px solid #667eea;
+}

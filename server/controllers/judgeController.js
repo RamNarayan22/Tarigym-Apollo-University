@@ -15,7 +15,12 @@ exports.getAssignedPosters = async (req, res) => {
         return {
           ...poster.toObject(),
           scored: !!existingScore,
-          myScore: existingScore ? existingScore.marks : null
+          myScore: existingScore ? existingScore.marksForOverall : null,
+          myScoreBreakdown: existingScore ? {
+            marksForCreatvity: existingScore.marksForCreatvity,
+            marksForPresentation: existingScore.marksForPresentation,
+            marksForInnovation: existingScore.marksForInnovation
+          } : null
         };
       })
     );

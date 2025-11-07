@@ -193,7 +193,10 @@ const AdminDashboard = () => {
               <tr>
                 <th>Poster</th>
                 <th>Judge</th>
-                <th>Marks</th>
+                <th>Creativity</th>
+                <th>Presentation</th>
+                <th>Innovation</th>
+                <th>Total</th>
                 <th>Comments</th>
                 <th>Submitted At</th>
               </tr>
@@ -203,7 +206,10 @@ const AdminDashboard = () => {
                 <tr key={score._id}>
                   <td>{score.poster?.title}</td>
                   <td>{score.judge?.username}</td>
-                  <td>{score.marks}</td>
+                  <td>{score.marksForCreatvity}</td>
+                  <td>{score.marksForPresentation}</td>
+                  <td>{score.marksForInnovation}</td>
+                  <td><strong>{score.marksForOverall}/300</strong></td>
                   <td>{score.comments}</td>
                   <td>{new Date(score.submittedAt).toLocaleString()}</td>
                 </tr>

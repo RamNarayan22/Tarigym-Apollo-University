@@ -118,15 +118,22 @@ exports.getPosterScores = async (req, res) => {
     const scores = await Score.find({ poster: posterId })
       .populate('judge', 'username');
     
-    const totalMarks = scores.reduce((sum, score) => sum + score.marks, 0);
+    const totalMarks = scores.reduce((sum, score) => sum + score.marksForOverall, 0);
     const averageMarks = scores.length > 0 ? totalMarks / scores.length : 0;
+    
+    const avgCreativity = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForCreatvity, 0) / scores.length : 0;
+    const avgPresentation = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForPresentation, 0) / scores.length : 0;
+    const avgInnovation = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForInnovation, 0) / scores.length : 0;
 
     res.json({
       scores,
       summary: {
         totalScores: scores.length,
         averageMarks: averageMarks.toFixed(2),
-        totalMarks
+        totalMarks,
+        avgCreativity: avgCreativity.toFixed(2),
+        avgPresentation: avgPresentation.toFixed(2),
+        avgInnovation: avgInnovation.toFixed(2)
       }
     });
   } catch (error) {
