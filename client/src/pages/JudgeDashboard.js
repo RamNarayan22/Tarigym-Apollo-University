@@ -5,9 +5,10 @@ import './JudgeDashboard.css';
 const JudgeDashboard = () => {
   const [posters, setPosters] = useState([]);
   const [selectedPoster, setSelectedPoster] = useState(null);
-  const [marksForCreatvity, setMarksForCreatvity] = useState('');
+  const [marksForCreativity, setMarksForCreativity] = useState('');
   const [marksForPresentation, setMarksForPresentation] = useState('');
   const [marksForInnovation, setMarksForInnovation] = useState('');
+  const [marksForRelevance, setMarksForRelevance] = useState('');
   const [comments, setComments] = useState('');
   const [message, setMessage] = useState('');
 
@@ -25,16 +26,18 @@ const JudgeDashboard = () => {
     try {
       await judgeAPI.submitScore({
         posterId: selectedPoster._id,
-        marksForCreatvity: Number(marksForCreatvity),
+        marksForCreativity: Number(marksForCreativity),
         marksForPresentation: Number(marksForPresentation),
         marksForInnovation: Number(marksForInnovation),
+        marksForRelevance: Number(marksForRelevance),
         comments
       });
       setMessage('Score submitted successfully!');
       setSelectedPoster(null);
-      setMarksForCreatvity('');
+      setMarksForCreativity('');
       setMarksForPresentation('');
       setMarksForInnovation('');
+      setMarksForRelevance('');
       setComments('');
       fetchPosters();
     } catch (err) {
@@ -65,11 +68,12 @@ const JudgeDashboard = () => {
                   <p>{poster.description}</p>
                   {poster.scored ? (
                     <div className="scored-badge">
-                      ✓ Scored: {poster.myScore}/300
-                      <div style={{fontSize: '12px', marginTop: '5px'}}>
-                        C: {poster.myScoreBreakdown?.marksForCreatvity} | 
+                      ✓ Scored: {poster.myScore}/100
+                      <div style={{fontSize: '11px', marginTop: '5px'}}>
+                        C: {poster.myScoreBreakdown?.marksForCreativity} | 
                         P: {poster.myScoreBreakdown?.marksForPresentation} | 
-                        I: {poster.myScoreBreakdown?.marksForInnovation}
+                        I: {poster.myScoreBreakdown?.marksForInnovation} |
+                        R: {poster.myScoreBreakdown?.marksForRelevance}
                       </div>
                     </div>
                   ) : (
@@ -101,23 +105,23 @@ const JudgeDashboard = () => {
             <h3>Submit Your Score</h3>
             
             <div className="form-group">
-              <label>Creativity (0-100)</label>
+              <label>Creativity (0-25)</label>
               <input
                 type="number"
                 min="0"
-                max="100"
-                value={marksForCreatvity}
-                onChange={(e) => setMarksForCreatvity(e.target.value)}
+                max="25"
+                value={marksForCreativity}
+                onChange={(e) => setMarksForCreativity(e.target.value)}
                 required
               />
             </div>
 
             <div className="form-group">
-              <label>Presentation (0-100)</label>
+              <label>Presentation (0-25)</label>
               <input
                 type="number"
                 min="0"
-                max="100"
+                max="25"
                 value={marksForPresentation}
                 onChange={(e) => setMarksForPresentation(e.target.value)}
                 required
@@ -125,19 +129,31 @@ const JudgeDashboard = () => {
             </div>
 
             <div className="form-group">
-              <label>Innovation (0-100)</label>
+              <label>Innovation (0-25)</label>
               <input
                 type="number"
                 min="0"
-                max="100"
+                max="25"
                 value={marksForInnovation}
                 onChange={(e) => setMarksForInnovation(e.target.value)}
                 required
               />
             </div>
 
+            <div className="form-group">
+              <label>Relevance (0-25)</label>
+              <input
+                type="number"
+                min="0"
+                max="25"
+                value={marksForRelevance}
+                onChange={(e) => setMarksForRelevance(e.target.value)}
+                required
+              />
+            </div>
+
             <div className="total-score">
-              <strong>Total Score: {(Number(marksForCreatvity) || 0) + (Number(marksForPresentation) || 0) + (Number(marksForInnovation) || 0)}/300</strong>
+              <strong>Total Score: {(Number(marksForCreativity) || 0) + (Number(marksForPresentation) || 0) + (Number(marksForInnovation) || 0) + (Number(marksForRelevance) || 0)}/100</strong>
             </div>
 
             <div className="form-group">

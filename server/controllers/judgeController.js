@@ -17,9 +17,10 @@ exports.getAssignedPosters = async (req, res) => {
           scored: !!existingScore,
           myScore: existingScore ? existingScore.marksForOverall : null,
           myScoreBreakdown: existingScore ? {
-            marksForCreatvity: existingScore.marksForCreatvity,
+            marksForCreativity: existingScore.marksForCreativity,
             marksForPresentation: existingScore.marksForPresentation,
-            marksForInnovation: existingScore.marksForInnovation
+            marksForInnovation: existingScore.marksForInnovation,
+            marksForRelevance: existingScore.marksForRelevance
           } : null
         };
       })
@@ -33,14 +34,14 @@ exports.getAssignedPosters = async (req, res) => {
 
 exports.submitScore = async (req, res) => {
   try {
-    const { posterId, marksForCreatvity, marksForPresentation, marksForInnovation, comments } = req.body;
+    const { posterId, marksForCreativity, marksForPresentation, marksForInnovation, marksForRelevance, comments } = req.body;
 
-    if (!posterId || marksForCreatvity === undefined || marksForPresentation === undefined || marksForInnovation === undefined) {
+    if (!posterId || marksForCreativity === undefined || marksForPresentation === undefined || marksForInnovation === undefined || marksForRelevance === undefined) {
       return res.status(400).json({ message: 'Please provide posterId and all marks' });
     }
 
-    if (marksForCreatvity < 0 || marksForCreatvity > 100 || marksForPresentation < 0 || marksForPresentation > 100 || marksForInnovation < 0 || marksForInnovation > 100) {
-      return res.status(400).json({ message: 'All marks must be between 0 and 100' });
+    if (marksForCreativity < 0 || marksForCreativity > 25 || marksForPresentation < 0 || marksForPresentation > 25 || marksForInnovation < 0 || marksForInnovation > 25 || marksForRelevance < 0 || marksForRelevance > 25) {
+      return res.status(400).json({ message: 'All marks must be between 0 and 25' });
     }
 
     const poster = await Poster.findById(posterId);
@@ -55,10 +56,11 @@ exports.submitScore = async (req, res) => {
     let score = await Score.findOne({ poster: posterId, judge: req.user._id });
 
     if (score) {
-      score.marksForCreatvity = marksForCreatvity;
+      score.marksForCreativity = marksForCreativity;
       score.marksForPresentation = marksForPresentation;
       score.marksForInnovation = marksForInnovation;
-      score.marksForOverall = marksForCreatvity+marksForPresentation+marksForInnovation;
+      score.marksForRelevance = marksForRelevance;
+      score.marksForOverall = marksForCreativity + marksForPresentation + marksForInnovation + marksForRelevance;
       score.comments = comments || '';
       score.submittedAt = Date.now();
       await score.save();
@@ -66,10 +68,11 @@ exports.submitScore = async (req, res) => {
       score = await Score.create({
         poster: posterId,
         judge: req.user._id,
-        marksForCreatvity: marksForCreatvity,
+        marksForCreativity: marksForCreativity,
         marksForPresentation: marksForPresentation,
         marksForInnovation: marksForInnovation,
-        marksForOverall: marksForCreatvity+marksForPresentation+marksForInnovation,
+        marksForRelevance: marksForRelevance,
+        marksForOverall: marksForCreativity + marksForPresentation + marksForInnovation + marksForRelevance,
         comments: comments || ''
       });
     }
