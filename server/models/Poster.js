@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const posterSchema = new mongoose.Schema({
+  posterId: {
+    type: String,
+    required: true,
+    unique: true
+  },
   title: {
     type: String,
     required: true

@@ -45,13 +45,19 @@ exports.getAllJudges = async (req, res) => {
 
 exports.uploadPoster = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, posterId } = req.body;
 
-    if (!title || !description || !req.file) {
-      return res.status(400).json({ message: 'Please provide title, description, and image' });
+    if (!title || !description || !posterId || !req.file) {
+      return res.status(400).json({ message: 'Please provide poster ID, title, description, and image' });
+    }
+
+    const existingPoster = await Poster.findOne({ posterId });
+    if (existingPoster) {
+      return res.status(400).json({ message: 'Poster ID already exists' });
     }
 
     const poster = await Poster.create({
+      posterId,
       title,
       description,
       imageUrl: `/uploads/${req.file.filename}`

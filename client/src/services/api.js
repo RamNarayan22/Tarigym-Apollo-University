@@ -9,7 +9,8 @@ export const adminAPI = {
   getPosters: () => axios.get('/api/admin/posters'),
   assignPoster: (data) => axios.post('/api/admin/assign', data),
   getAllScores: () => axios.get('/api/admin/scores'),
-  getPosterScores: (posterId) => axios.get(`/api/admin/scores/${posterId}`)
+  getPosterScores: (posterId) => axios.get(`/api/admin/scores/${posterId}`),
+  exportScores: () => axios.get('/api/admin/export', { responseType: 'blob' })
 };
 
 export const judgeAPI = {

@@ -46,6 +46,21 @@
   border-bottom-color: #667eea;
 }
 
+.btn-export {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: auto;
+}
+
+.btn-export:hover {
+  background: #218838;
+}
+
 .message {
   background: #d4edda;
   color: #155724;
@@ -133,6 +148,20 @@ table th {
   border-radius: 10px;
   padding: 15px;
   background: #f9f9f9;
+  position: relative;
+}
+
+.poster-id-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #667eea;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  z-index: 1;
 }
 
 .poster-card img {

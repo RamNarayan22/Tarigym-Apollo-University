@@ -8,7 +8,7 @@ const AdminDashboard = () => {
   const [posters, setPosters] = useState([]);
   const [scores, setScores] = useState([]);
   const [newJudge, setNewJudge] = useState({ username: '', password: '' });
-  const [newPoster, setNewPoster] = useState({ title: '', description: '', image: null });
+  const [newPoster, setNewPoster] = useState({ posterId: '', title: '', description: '', image: null });
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -47,6 +47,7 @@ const AdminDashboard = () => {
   const handleUploadPoster = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+    formData.append('posterId', newPoster.posterId);
     formData.append('title', newPoster.title);
     formData.append('description', newPoster.description);
     formData.append('image', newPoster.image);
@@ -54,10 +55,25 @@ const AdminDashboard = () => {
     try {
       await adminAPI.uploadPoster(formData);
       setMessage('Poster uploaded successfully!');
-      setNewPoster({ title: '', description: '', image: null });
+      setNewPoster({ posterId: '', title: '', description: '', image: null });
       fetchPosters();
     } catch (err) {
       setMessage(err.response?.data?.message || 'Error uploading poster');
+    }
+  };
+
+  const handleExportScores = async () => {
+    try {
+      const response = await adminAPI.exportScores();
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'TARIGYM_Poster_Scores.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      setMessage('Error exporting scores');
     }
   };
 
@@ -83,6 +99,7 @@ const AdminDashboard = () => {
         <button className={activeTab === 'posters' ? 'active' : ''} onClick={() => setActiveTab('posters')}>Posters</button>
         <button className={activeTab === 'assign' ? 'active' : ''} onClick={() => setActiveTab('assign')}>Assign</button>
         <button className={activeTab === 'scores' ? 'active' : ''} onClick={() => setActiveTab('scores')}>Scores</button>
+        <button onClick={handleExportScores} className="btn-export">📊 Export Excel</button>
       </div>
 
       {message && <div className="message">{message}</div>}
@@ -134,6 +151,13 @@ const AdminDashboard = () => {
           <form onSubmit={handleUploadPoster}>
             <input
               type="text"
+              placeholder="Poster ID (e.g., P001, P002)"
+              value={newPoster.posterId}
+              onChange={(e) => setNewPoster({ ...newPoster, posterId: e.target.value })}
+              required
+            />
+            <input
+              type="text"
               placeholder="Title"
               value={newPoster.title}
               onChange={(e) => setNewPoster({ ...newPoster, title: e.target.value })}
@@ -158,6 +182,7 @@ const AdminDashboard = () => {
           <div className="posters-grid">
             {posters.map(poster => (
               <div key={poster._id} className="poster-card">
+                <div className="poster-id-badge">{poster.posterId}</div>
                 <img src={`${process.env.REACT_APP_API_URL || ''}${poster.imageUrl}`} alt={poster.title} />
                 <h3>{poster.title}</h3>
                 <p>{poster.description}</p>

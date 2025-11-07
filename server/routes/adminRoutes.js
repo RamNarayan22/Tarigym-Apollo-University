@@ -9,6 +9,7 @@ const {
   getAllScores,
   getPosterScores
 } = require('../controllers/adminController');
+const { exportScores } = require('../controllers/exportController');
 const { protect, adminOnly } = require('../middleware/auth');
 const upload = require('../middleware/upload');
 
@@ -24,5 +25,6 @@ router.post('/assign', assignPosterToJudge);
 
 router.get('/scores', getAllScores);
 router.get('/scores/:posterId', getPosterScores);
+router.get('/export', exportScores);
 
 module.exports = router;
