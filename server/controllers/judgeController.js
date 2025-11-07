@@ -28,14 +28,14 @@ exports.getAssignedPosters = async (req, res) => {
 
 exports.submitScore = async (req, res) => {
   try {
-    const { posterId, marks, comments } = req.body;
+    const { posterId, marksForCreatvity, marksForPresentation, marksForInnovation, comments } = req.body;
 
-    if (!posterId || marks === undefined) {
-      return res.status(400).json({ message: 'Please provide posterId and marks' });
+    if (!posterId || marksForCreatvity === undefined || marksForPresentation === undefined || marksForInnovation === undefined) {
+      return res.status(400).json({ message: 'Please provide posterId and all marks' });
     }
 
-    if (marks < 0 || marks > 100) {
-      return res.status(400).json({ message: 'Marks must be between 0 and 100' });
+    if (marksForCreatvity < 0 || marksForCreatvity > 100 || marksForPresentation < 0 || marksForPresentation > 100 || marksForInnovation < 0 || marksForInnovation > 100) {
+      return res.status(400).json({ message: 'All marks must be between 0 and 100' });
     }
 
     const poster = await Poster.findById(posterId);
@@ -50,7 +50,10 @@ exports.submitScore = async (req, res) => {
     let score = await Score.findOne({ poster: posterId, judge: req.user._id });
 
     if (score) {
-      score.marks = marks;
+      score.marksForCreatvity = marksForCreatvity;
+      score.marksForPresentation = marksForPresentation;
+      score.marksForInnovation = marksForInnovation;
+      score.marksForOverall = marksForCreatvity+marksForPresentation+marksForInnovation;
       score.comments = comments || '';
       score.submittedAt = Date.now();
       await score.save();
@@ -58,7 +61,10 @@ exports.submitScore = async (req, res) => {
       score = await Score.create({
         poster: posterId,
         judge: req.user._id,
-        marks,
+        marksForCreatvity: marksForCreatvity,
+        marksForPresentation: marksForPresentation,
+        marksForInnovation: marksForInnovation,
+        marksForOverall: marksForCreatvity+marksForPresentation+marksForInnovation,
         comments: comments || ''
       });
     }
