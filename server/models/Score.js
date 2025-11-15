@@ -11,34 +11,41 @@ const scoreSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  marksForCreatvity: {
+  marksForTitle: {
     type: Number,
     required: true,
     min: 0,
-    max: 25
+    max: 3
   },
-  marksForPresentation: {
+  marksForObjectives: {
     type: Number,
     required: true,
     min: 0,
-    max: 25
+    max: 3
   },
-  marksForInnovation: {
+  marksForMethodology: {
     type: Number,
     required: true,
     min: 0,
-    max: 25
+    max: 8
   },
-  marksForRelevance: {
+  marksForResults: {
     type: Number,
     required: true,
     min: 0,
-    max: 25
+    max: 6
+  },
+  marksForPresentationQA: {
+    type: Number,
+    required: true,
+    min: 0,
+    max: 5
   },
   marksForOverall: {
     type: Number,
-    required: true
-    
+    required: true,
+    min: 0,
+    max: 25
   },
   comments: {
     type: String,
