@@ -8,7 +8,9 @@ const AdminDashboard = () => {
   const [posters, setPosters] = useState([]);
   const [scores, setScores] = useState([]);
   const [newJudge, setNewJudge] = useState({ username: '', password: '' });
-  const [newPoster, setNewPoster] = useState({ posterId: '', title: '', author: '', description: '', image: null });
+  const [newPoster, setNewPoster] = useState({ posterId: '', title: '', description: '', image: null });
+  const [numAuthors, setNumAuthors] = useState(1);
+  const [authors, setAuthors] = useState(['']);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -44,19 +46,33 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleNumAuthorsChange = (num) => {
+    setNumAuthors(num);
+    const newAuthors = Array(num).fill('').map((_, i) => authors[i] || '');
+    setAuthors(newAuthors);
+  };
+
+  const handleAuthorChange = (index, value) => {
+    const newAuthors = [...authors];
+    newAuthors[index] = value;
+    setAuthors(newAuthors);
+  };
+
   const handleUploadPoster = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('posterId', newPoster.posterId);
     formData.append('title', newPoster.title);
-    formData.append('author', newPoster.author);
+    formData.append('authors', JSON.stringify(authors.filter(a => a.trim())));
     formData.append('description', newPoster.description);
     formData.append('image', newPoster.image);
 
     try {
       await adminAPI.uploadPoster(formData);
       setMessage('Poster uploaded successfully!');
-      setNewPoster({ posterId: '', title: '', author: '', description: '', image: null });
+      setNewPoster({ posterId: '', title: '', description: '', image: null });
+      setNumAuthors(1);
+      setAuthors(['']);
       fetchPosters();
     } catch (err) {
       setMessage(err.response?.data?.message || 'Error uploading poster');
@@ -164,13 +180,28 @@ const AdminDashboard = () => {
               onChange={(e) => setNewPoster({ ...newPoster, title: e.target.value })}
               required
             />
-            <input
-              type="text"
-              placeholder="Author Name"
-              value={newPoster.author}
-              onChange={(e) => setNewPoster({ ...newPoster, author: e.target.value })}
-              required
-            />
+            <div style={{ marginBottom: '10px' }}>
+              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Number of Authors</label>
+              <select 
+                value={numAuthors} 
+                onChange={(e) => handleNumAuthorsChange(Number(e.target.value))}
+                style={{ width: '100%', padding: '8px', fontSize: '14px' }}
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
+            </div>
+            {authors.map((author, index) => (
+              <input
+                key={index}
+                type="text"
+                placeholder={`Author ${index + 1} Name`}
+                value={author}
+                onChange={(e) => handleAuthorChange(index, e.target.value)}
+                required
+              />
+            ))}
             <textarea
               placeholder="Description"
               value={newPoster.description}
@@ -193,7 +224,7 @@ const AdminDashboard = () => {
                 <div className="poster-id-badge">{poster.posterId}</div>
                 <img src={`${process.env.REACT_APP_API_URL || ''}${poster.imageUrl}`} alt={poster.title} />
                 <h3>{poster.title}</h3>
-                <p><strong>Author:</strong> {poster.author}</p>
+                <p><strong>Authors:</strong> {poster.authors?.join(', ') || 'N/A'}</p>
                 <p>{poster.description}</p>
                 <p><strong>Assigned Judges:</strong> {poster.assignedJudges.map(j => j.username).join(', ') || 'None'}</p>
               </div>

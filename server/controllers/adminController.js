@@ -45,10 +45,17 @@ exports.getAllJudges = async (req, res) => {
 
 exports.uploadPoster = async (req, res) => {
   try {
-    const { title, author, description, posterId } = req.body;
+    const { title, authors, description, posterId } = req.body;
 
-    if (!title || !author || !description || !posterId || !req.file) {
-      return res.status(400).json({ message: 'Please provide poster ID, title, author, description, and image' });
+    let authorsList = [];
+    if (typeof authors === 'string') {
+      authorsList = JSON.parse(authors);
+    } else if (Array.isArray(authors)) {
+      authorsList = authors;
+    }
+
+    if (!title || !authorsList.length || !description || !posterId || !req.file) {
+      return res.status(400).json({ message: 'Please provide poster ID, title, authors, description, and image' });
     }
 
     const existingPoster = await Poster.findOne({ posterId });
@@ -59,7 +66,7 @@ exports.uploadPoster = async (req, res) => {
     const poster = await Poster.create({
       posterId,
       title,
-      author,
+      authors: authorsList,
       description,
       imageUrl: `/uploads/${req.file.filename}`
     });

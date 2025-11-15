@@ -10,10 +10,10 @@ const posterSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  author: {
+  authors: [{
     type: String,
     required: true
-  },
+  }],
   description: {
     type: String,
     required: true
