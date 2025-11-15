@@ -68,6 +68,7 @@ exports.submitScore = async (req, res) => {
       await score.save();
     } else {
       score = await Score.create({
+        authorName: poster.authorName,
         poster: posterId,
         judge: req.user._id,
         marksForTitle,

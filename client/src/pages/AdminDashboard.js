@@ -8,7 +8,7 @@ const AdminDashboard = () => {
   const [posters, setPosters] = useState([]);
   const [scores, setScores] = useState([]);
   const [newJudge, setNewJudge] = useState({ username: '', password: '' });
-  const [newPoster, setNewPoster] = useState({ posterId: '', title: '', description: '', image: null });
+  const [newPoster, setNewPoster] = useState({ posterId: '', title: '', author: '', description: '', image: null });
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -49,13 +49,14 @@ const AdminDashboard = () => {
     const formData = new FormData();
     formData.append('posterId', newPoster.posterId);
     formData.append('title', newPoster.title);
+    formData.append('author', newPoster.author);
     formData.append('description', newPoster.description);
     formData.append('image', newPoster.image);
 
     try {
       await adminAPI.uploadPoster(formData);
       setMessage('Poster uploaded successfully!');
-      setNewPoster({ posterId: '', title: '', description: '', image: null });
+      setNewPoster({ posterId: '', title: '', author: '', description: '', image: null });
       fetchPosters();
     } catch (err) {
       setMessage(err.response?.data?.message || 'Error uploading poster');
@@ -163,6 +164,13 @@ const AdminDashboard = () => {
               onChange={(e) => setNewPoster({ ...newPoster, title: e.target.value })}
               required
             />
+            <input
+              type="text"
+              placeholder="Author Name"
+              value={newPoster.author}
+              onChange={(e) => setNewPoster({ ...newPoster, author: e.target.value })}
+              required
+            />
             <textarea
               placeholder="Description"
               value={newPoster.description}
@@ -185,6 +193,7 @@ const AdminDashboard = () => {
                 <div className="poster-id-badge">{poster.posterId}</div>
                 <img src={`${process.env.REACT_APP_API_URL || ''}${poster.imageUrl}`} alt={poster.title} />
                 <h3>{poster.title}</h3>
+                <p><strong>Author:</strong> {poster.author}</p>
                 <p>{poster.description}</p>
                 <p><strong>Assigned Judges:</strong> {poster.assignedJudges.map(j => j.username).join(', ') || 'None'}</p>
               </div>

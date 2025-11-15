@@ -45,10 +45,10 @@ exports.getAllJudges = async (req, res) => {
 
 exports.uploadPoster = async (req, res) => {
   try {
-    const { title, description, posterId } = req.body;
+    const { title, author, description, posterId } = req.body;
 
-    if (!title || !description || !posterId || !req.file) {
-      return res.status(400).json({ message: 'Please provide poster ID, title, description, and image' });
+    if (!title || !author || !description || !posterId || !req.file) {
+      return res.status(400).json({ message: 'Please provide poster ID, title, author, description, and image' });
     }
 
     const existingPoster = await Poster.findOne({ posterId });
@@ -59,6 +59,7 @@ exports.uploadPoster = async (req, res) => {
     const poster = await Poster.create({
       posterId,
       title,
+      author,
       description,
       imageUrl: `/uploads/${req.file.filename}`
     });

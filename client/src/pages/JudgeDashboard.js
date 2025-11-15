@@ -68,6 +68,7 @@ const JudgeDashboard = () => {
                 <div key={poster._id} className="poster-card">
                   <img src={`${process.env.REACT_APP_API_URL || ''}${poster.imageUrl}`} alt={poster.title} />
                   <h3>{poster.title}</h3>
+                  <p><strong>Author:</strong> {poster.author}</p>
                   <p>{poster.description}</p>
                   {poster.scored ? (
                     <div className="scored-badge">
@@ -102,6 +103,7 @@ const JudgeDashboard = () => {
           <div className="poster-detail">
             <img src={`${process.env.REACT_APP_API_URL || ''}${selectedPoster.imageUrl}`} alt={selectedPoster.title} />
             <h2>{selectedPoster.title}</h2>
+            <p><strong>Author:</strong> {selectedPoster.author}</p>
             <p>{selectedPoster.description}</p>
           </div>
 
