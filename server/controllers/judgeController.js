@@ -17,10 +17,11 @@ exports.getAssignedPosters = async (req, res) => {
           scored: !!existingScore,
           myScore: existingScore ? existingScore.marksForOverall : null,
           myScoreBreakdown: existingScore ? {
-            marksForCreativity: existingScore.marksForCreativity,
-            marksForPresentation: existingScore.marksForPresentation,
-            marksForInnovation: existingScore.marksForInnovation,
-            marksForRelevance: existingScore.marksForRelevance
+            marksForTitle: existingScore.marksForTitle,
+            marksForObjectives: existingScore.marksForObjectives,
+            marksForMethodology: existingScore.marksForMethodology,
+            marksForResults: existingScore.marksForResults,
+            marksForPresentationQA: existingScore.marksForPresentationQA
           } : null
         };
       })
@@ -34,14 +35,14 @@ exports.getAssignedPosters = async (req, res) => {
 
 exports.submitScore = async (req, res) => {
   try {
-    const { posterId, marksForCreativity, marksForPresentation, marksForInnovation, marksForRelevance, comments } = req.body;
+    const { posterId, marksForTitle, marksForObjectives, marksForMethodology, marksForResults, marksForPresentationQA, comments } = req.body;
 
-    if (!posterId || marksForCreativity === undefined || marksForPresentation === undefined || marksForInnovation === undefined || marksForRelevance === undefined) {
+    if (!posterId || marksForTitle === undefined || marksForObjectives === undefined || marksForMethodology === undefined || marksForResults === undefined || marksForPresentationQA === undefined) {
       return res.status(400).json({ message: 'Please provide posterId and all marks' });
     }
 
-    if (marksForCreativity < 0 || marksForCreativity > 25 || marksForPresentation < 0 || marksForPresentation > 25 || marksForInnovation < 0 || marksForInnovation > 25 || marksForRelevance < 0 || marksForRelevance > 25) {
-      return res.status(400).json({ message: 'All marks must be between 0 and 25' });
+    if (marksForTitle < 0 || marksForTitle > 3 || marksForObjectives < 0 || marksForObjectives > 3 || marksForMethodology < 0 || marksForMethodology > 8 || marksForResults < 0 || marksForResults > 6 || marksForPresentationQA < 0 || marksForPresentationQA > 5) {
+      return res.status(400).json({ message: 'Invalid marks range' });
     }
 
     const poster = await Poster.findById(posterId);
@@ -56,11 +57,12 @@ exports.submitScore = async (req, res) => {
     let score = await Score.findOne({ poster: posterId, judge: req.user._id });
 
     if (score) {
-      score.marksForCreativity = marksForCreativity;
-      score.marksForPresentation = marksForPresentation;
-      score.marksForInnovation = marksForInnovation;
-      score.marksForRelevance = marksForRelevance;
-      score.marksForOverall = marksForCreativity + marksForPresentation + marksForInnovation + marksForRelevance;
+      score.marksForTitle = marksForTitle;
+      score.marksForObjectives = marksForObjectives;
+      score.marksForMethodology = marksForMethodology;
+      score.marksForResults = marksForResults;
+      score.marksForPresentationQA = marksForPresentationQA;
+      score.marksForOverall = marksForTitle + marksForObjectives + marksForMethodology + marksForResults + marksForPresentationQA;
       score.comments = comments || '';
       score.submittedAt = Date.now();
       await score.save();
@@ -68,11 +70,12 @@ exports.submitScore = async (req, res) => {
       score = await Score.create({
         poster: posterId,
         judge: req.user._id,
-        marksForCreativity: marksForCreativity,
-        marksForPresentation: marksForPresentation,
-        marksForInnovation: marksForInnovation,
-        marksForRelevance: marksForRelevance,
-        marksForOverall: marksForCreativity + marksForPresentation + marksForInnovation + marksForRelevance,
+        marksForTitle,
+        marksForObjectives,
+        marksForMethodology,
+        marksForResults,
+        marksForPresentationQA,
+        marksForOverall: marksForTitle + marksForObjectives + marksForMethodology + marksForResults + marksForPresentationQA,
         comments: comments || ''
       });
     }

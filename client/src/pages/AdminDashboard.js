@@ -218,10 +218,11 @@ const AdminDashboard = () => {
               <tr>
                 <th>Poster</th>
                 <th>Judge</th>
-                <th>Creativity</th>
-                <th>Presentation</th>
-                <th>Innovation</th>
-                <th>Relevance</th>
+                <th>Title</th>
+                <th>Objectives</th>
+                <th>Methodology</th>
+                <th>Results</th>
+                <th>Presentation Q&A</th>
                 <th>Total</th>
                 <th>Comments</th>
                 <th>Submitted At</th>
@@ -232,11 +233,12 @@ const AdminDashboard = () => {
                 <tr key={score._id}>
                   <td>{score.poster?.title}</td>
                   <td>{score.judge?.username}</td>
-                  <td>{score.marksForCreativity}/25</td>
-                  <td>{score.marksForPresentation}/25</td>
-                  <td>{score.marksForInnovation}/25</td>
-                  <td>{score.marksForRelevance}/25</td>
-                  <td><strong>{score.marksForOverall}/100</strong></td>
+                  <td>{score.marksForTitle}/3</td>
+                  <td>{score.marksForObjectives}/3</td>
+                  <td>{score.marksForMethodology}/8</td>
+                  <td>{score.marksForResults}/6</td>
+                  <td>{score.marksForPresentationQA}/5</td>
+                  <td><strong>{score.marksForOverall}/25</strong></td>
                   <td>{score.comments}</td>
                   <td>{new Date(score.submittedAt).toLocaleString()}</td>
                 </tr>

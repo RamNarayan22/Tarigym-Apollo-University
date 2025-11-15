@@ -16,11 +16,12 @@ exports.exportScores = async (req, res) => {
       { header: 'Poster ID', key: 'posterId', width: 15 },
       { header: 'Poster Title', key: 'title', width: 30 },
       { header: 'Judge', key: 'judge', width: 20 },
-      { header: 'Creativity', key: 'creativity', width: 12 },
-      { header: 'Innovation', key: 'innovation', width: 12 },
-      { header: 'Presentation', key: 'presentation', width: 15 },
-      { header: 'Relevance', key: 'relevance', width: 12 },
-      { header: 'Total', key: 'total', width: 10 },
+      { header: 'Title (3)', key: 'title_marks', width: 12 },
+      { header: 'Objectives (3)', key: 'objectives', width: 15 },
+      { header: 'Methodology (8)', key: 'methodology', width: 17 },
+      { header: 'Results (6)', key: 'results', width: 13 },
+      { header: 'Presentation Q&A (5)', key: 'presentationQA', width: 20 },
+      { header: 'Total (25)', key: 'total', width: 12 },
       { header: 'Comments', key: 'comments', width: 40 }
     ];
 
@@ -37,10 +38,11 @@ exports.exportScores = async (req, res) => {
         posterId: score.poster?.posterId || 'N/A',
         title: score.poster?.title || 'N/A',
         judge: score.judge?.username || 'N/A',
-        creativity: score.marksForCreativity,
-        innovation: score.marksForInnovation,
-        presentation: score.marksForPresentation,
-        relevance: score.marksForRelevance,
+        title_marks: score.marksForTitle,
+        objectives: score.marksForObjectives,
+        methodology: score.marksForMethodology,
+        results: score.marksForResults,
+        presentationQA: score.marksForPresentationQA,
         total: score.marksForOverall,
         comments: score.comments || ''
       });
@@ -51,10 +53,11 @@ exports.exportScores = async (req, res) => {
       { header: 'Poster ID', key: 'posterId', width: 15 },
       { header: 'Poster Title', key: 'title', width: 30 },
       { header: 'Judges Count', key: 'judgesCount', width: 15 },
-      { header: 'Avg Creativity', key: 'avgCreativity', width: 15 },
-      { header: 'Avg Innovation', key: 'avgInnovation', width: 15 },
-      { header: 'Avg Presentation', key: 'avgPresentation', width: 18 },
-      { header: 'Avg Relevance', key: 'avgRelevance', width: 15 },
+      { header: 'Avg Title', key: 'avgTitle', width: 12 },
+      { header: 'Avg Objectives', key: 'avgObjectives', width: 15 },
+      { header: 'Avg Methodology', key: 'avgMethodology', width: 18 },
+      { header: 'Avg Results', key: 'avgResults', width: 13 },
+      { header: 'Avg Presentation Q&A', key: 'avgPresentationQA', width: 20 },
       { header: 'Average Total', key: 'avgTotal', width: 15 }
     ];
 
@@ -70,20 +73,22 @@ exports.exportScores = async (req, res) => {
       const posterScores = await Score.find({ poster: poster._id });
       
       if (posterScores.length > 0) {
-        const avgCreativity = posterScores.reduce((sum, s) => sum + s.marksForCreativity, 0) / posterScores.length;
-        const avgInnovation = posterScores.reduce((sum, s) => sum + s.marksForInnovation, 0) / posterScores.length;
-        const avgPresentation = posterScores.reduce((sum, s) => sum + s.marksForPresentation, 0) / posterScores.length;
-        const avgRelevance = posterScores.reduce((sum, s) => sum + s.marksForRelevance, 0) / posterScores.length;
+        const avgTitle = posterScores.reduce((sum, s) => sum + s.marksForTitle, 0) / posterScores.length;
+        const avgObjectives = posterScores.reduce((sum, s) => sum + s.marksForObjectives, 0) / posterScores.length;
+        const avgMethodology = posterScores.reduce((sum, s) => sum + s.marksForMethodology, 0) / posterScores.length;
+        const avgResults = posterScores.reduce((sum, s) => sum + s.marksForResults, 0) / posterScores.length;
+        const avgPresentationQA = posterScores.reduce((sum, s) => sum + s.marksForPresentationQA, 0) / posterScores.length;
         const avgTotal = posterScores.reduce((sum, s) => sum + s.marksForOverall, 0) / posterScores.length;
 
         summarySheet.addRow({
           posterId: poster.posterId,
           title: poster.title,
           judgesCount: posterScores.length,
-          avgCreativity: avgCreativity.toFixed(2),
-          avgInnovation: avgInnovation.toFixed(2),
-          avgPresentation: avgPresentation.toFixed(2),
-          avgRelevance: avgRelevance.toFixed(2),
+          avgTitle: avgTitle.toFixed(2),
+          avgObjectives: avgObjectives.toFixed(2),
+          avgMethodology: avgMethodology.toFixed(2),
+          avgResults: avgResults.toFixed(2),
+          avgPresentationQA: avgPresentationQA.toFixed(2),
           avgTotal: avgTotal.toFixed(2)
         });
       }

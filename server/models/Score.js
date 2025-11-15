@@ -11,7 +11,7 @@ const scoreSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  marksForCreativity: {
+  marksForCreatvity: {
     type: Number,
     required: true,
     min: 0,
@@ -37,9 +37,8 @@ const scoreSchema = new mongoose.Schema({
   },
   marksForOverall: {
     type: Number,
-    required: true,
-    min: 0,
-    max: 100
+    required: true
+    
   },
   comments: {
     type: String,

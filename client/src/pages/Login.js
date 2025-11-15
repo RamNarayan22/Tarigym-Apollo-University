@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import logo1 from '../assets/825-logo1623947674.jpg';
+import logo2 from '../assets/logo3.png';
 import './Login.css';
 
 const Login = () => {
@@ -28,6 +30,10 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-card">
+        <div className="logo-container">
+          <img src={logo1} alt="Logo 1" className="login-logo" />
+          <img src={logo2} alt="Logo 2" className="login-logo" />
+        </div>
         <h1>TARIGYM</h1>
         <h2>Poster Competition Login</h2>
         {error && <div className="error">{error}</div>}

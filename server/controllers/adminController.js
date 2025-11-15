@@ -127,10 +127,11 @@ exports.getPosterScores = async (req, res) => {
     const totalMarks = scores.reduce((sum, score) => sum + score.marksForOverall, 0);
     const averageMarks = scores.length > 0 ? totalMarks / scores.length : 0;
     
-    const avgCreativity = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForCreativity, 0) / scores.length : 0;
-    const avgPresentation = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForPresentation, 0) / scores.length : 0;
-    const avgInnovation = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForInnovation, 0) / scores.length : 0;
-    const avgRelevance = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForRelevance, 0) / scores.length : 0;
+    const avgTitle = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForTitle, 0) / scores.length : 0;
+    const avgObjectives = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForObjectives, 0) / scores.length : 0;
+    const avgMethodology = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForMethodology, 0) / scores.length : 0;
+    const avgResults = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForResults, 0) / scores.length : 0;
+    const avgPresentationQA = scores.length > 0 ? scores.reduce((sum, s) => sum + s.marksForPresentationQA, 0) / scores.length : 0;
 
     res.json({
       scores,
@@ -138,10 +139,11 @@ exports.getPosterScores = async (req, res) => {
         totalScores: scores.length,
         averageMarks: averageMarks.toFixed(2),
         totalMarks,
-        avgCreativity: avgCreativity.toFixed(2),
-        avgPresentation: avgPresentation.toFixed(2),
-        avgInnovation: avgInnovation.toFixed(2),
-        avgRelevance: avgRelevance.toFixed(2)
+        avgTitle: avgTitle.toFixed(2),
+        avgObjectives: avgObjectives.toFixed(2),
+        avgMethodology: avgMethodology.toFixed(2),
+        avgResults: avgResults.toFixed(2),
+        avgPresentationQA: avgPresentationQA.toFixed(2)
       }
     });
   } catch (error) {
