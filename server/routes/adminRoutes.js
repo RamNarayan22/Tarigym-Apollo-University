@@ -19,7 +19,7 @@ router.use(adminOnly);
 router.post('/judges', createJudge);
 router.get('/judges', getAllJudges);
 
-router.post('/posters', upload.single('image'), uploadPoster);
+router.post('/posters', uploadPoster);
 router.get('/posters', getAllPosters);
 router.post('/assign', assignPosterToJudge);
 

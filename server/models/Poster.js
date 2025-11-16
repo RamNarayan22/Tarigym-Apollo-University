@@ -20,7 +20,7 @@ const posterSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
-    required: true
+    required: false
   },
   assignedJudges: [{
     type: mongoose.Schema.Types.ObjectId,

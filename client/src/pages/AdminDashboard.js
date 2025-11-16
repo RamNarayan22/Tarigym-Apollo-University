@@ -8,7 +8,7 @@ const AdminDashboard = () => {
   const [posters, setPosters] = useState([]);
   const [scores, setScores] = useState([]);
   const [newJudge, setNewJudge] = useState({ username: '', password: '' });
-  const [newPoster, setNewPoster] = useState({ posterId: '', title: '', description: '', image: null });
+  const [newPoster, setNewPoster] = useState({ posterId: '', title: '', description: '' });
   const [numAuthors, setNumAuthors] = useState(1);
   const [authors, setAuthors] = useState(['']);
   const [message, setMessage] = useState('');
@@ -60,17 +60,18 @@ const AdminDashboard = () => {
 
   const handleUploadPoster = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('posterId', newPoster.posterId);
-    formData.append('title', newPoster.title);
-    formData.append('authors', JSON.stringify(authors.filter(a => a.trim())));
-    formData.append('description', newPoster.description);
-    formData.append('image', newPoster.image);
+    
+    const posterData = {
+      posterId: newPoster.posterId,
+      title: newPoster.title,
+      authors: JSON.stringify(authors.filter(a => a.trim())),
+      description: newPoster.description
+    };
 
     try {
-      await adminAPI.uploadPoster(formData);
+      await adminAPI.uploadPoster(posterData);
       setMessage('Poster uploaded successfully!');
-      setNewPoster({ posterId: '', title: '', description: '', image: null });
+      setNewPoster({ posterId: '', title: '', description: '' });
       setNumAuthors(1);
       setAuthors(['']);
       fetchPosters();
@@ -208,13 +209,7 @@ const AdminDashboard = () => {
               onChange={(e) => setNewPoster({ ...newPoster, description: e.target.value })}
               required
             />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setNewPoster({ ...newPoster, image: e.target.files[0] })}
-              required
-            />
-            <button type="submit" className="btn-primary">Upload Poster</button>
+            <button type="submit" className="btn-primary">Create Poster</button>
           </form>
 
           <h2>All Posters</h2>
@@ -222,7 +217,6 @@ const AdminDashboard = () => {
             {posters.map(poster => (
               <div key={poster._id} className="poster-card">
                 <div className="poster-id-badge">{poster.posterId}</div>
-                <img src={`${process.env.REACT_APP_API_URL || ''}${poster.imageUrl}`} alt={poster.title} />
                 <h3>{poster.title}</h3>
                 <p><strong>Authors:</strong> {poster.authors?.join(', ') || 'N/A'}</p>
                 <p>{poster.description}</p>

@@ -54,8 +54,8 @@ exports.uploadPoster = async (req, res) => {
       authorsList = authors;
     }
 
-    if (!title || !authorsList.length || !description || !posterId || !req.file) {
-      return res.status(400).json({ message: 'Please provide poster ID, title, authors, description, and image' });
+    if (!title || !authorsList.length || !description || !posterId) {
+      return res.status(400).json({ message: 'Please provide poster ID, title, authors, and description' });
     }
 
     const existingPoster = await Poster.findOne({ posterId });
@@ -67,8 +67,7 @@ exports.uploadPoster = async (req, res) => {
       posterId,
       title,
       authors: authorsList,
-      description,
-      imageUrl: `/uploads/${req.file.filename}`
+      description
     });
 
     res.status(201).json({
